@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import os
+# بدل قراءة ملف، سيقرأ التوكن من إعدادات الموقع
+TOKEN = os.environ.get("DISCORD_TOKEN")
+bot.run(TOKEN)
 import json
 import logging
 import discord
