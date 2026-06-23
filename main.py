@@ -3,6 +3,7 @@ import os
 import json
 import logging
 import discord
+import roleplay
 from discord.ext import commands
 
 # إعدادات البيئة
