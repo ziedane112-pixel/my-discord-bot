@@ -5,6 +5,7 @@ import logging
 import discord
 import roleplay
 from discord.ext import commands
+from discord.ext import commands, tasks
 
 # إعدادات البيئة
 os.environ["PIP_DISABLE_PIP_VERSION_CHECK"] = "1"
@@ -38,8 +39,28 @@ def is_admin():
 async def on_ready():
     print(f"✅ تم تشغيل البوت بنجاح: {bot.user.name}")
 
-# هنا تضع الأوامر (help, بطاقة, اعطاء_ذهب) كما هي في ملفك...
-# [ضع الأوامر هنا]
+status_index = 0
+
+@tasks.loop(seconds=10)
+async def rotate_status():
+    global status_index
+
+    if status_index == 0:
+        await bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.watching,
+                name="!help"
+            )
+        )
+    else:
+        await bot.change_presence(
+            activity=discord.Activity(
+                type=discord.ActivityType.listening,
+                name="Dev: @hc6f"
+            )
+        )
+
+    status_index = (status_index + 1) % 2
 
 # --- تشغيل البوت يكون دائماً في نهاية الملف ---
 if __name__ == "__main__":
