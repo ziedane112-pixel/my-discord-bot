@@ -74,11 +74,13 @@ async def give_gold(ctx, member: discord.Member = None, amount: int = None):
         json.dump(rp_data, f, ensure_ascii=False, indent=4)
     await ctx.send(f"✅ | تم إعطاء **{amount}** ذهب لـ {member.mention}!")
 
-# تشغيل البوت باستخدام ملف التوكن الخارجي
+import os
+
+# تشغيل البوت باستخدام التوكن من إعدادات الاستضافة
 if __name__ == "__main__":
-    try:
-        with open("token.txt", "r") as f:
-            TOKEN = f.read().strip()
+    TOKEN = os.environ.get("DISCORD_TOKEN")
+    
+    if TOKEN:
         bot.run(TOKEN)
-    except FileNotFoundError:
-        print("❌ خطأ: لم يتم العثور على ملف token.txt! يرجى إنشاؤه ووضع التوكن بداخله.")
+    else:
+        print("❌ خطأ: لم يتم العثور على التوكن في إعدادات البيئة (DISCORD_TOKEN)!")
