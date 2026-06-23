@@ -74,13 +74,12 @@ async def give_gold(ctx, member: discord.Member = None, amount: int = None):
         json.dump(rp_data, f, ensure_ascii=False, indent=4)
     await ctx.send(f"✅ | تم إعطاء **{amount}** ذهب لـ {member.mention}!")
 
-import os
-
-# تشغيل البوت باستخدام التوكن من إعدادات الاستضافة
-if __name__ == "__main__":
     TOKEN = os.environ.get("DISCORD_TOKEN")
-    
+
     if TOKEN:
-        bot.run(TOKEN)
+        print("✅ التوكن تم العثور عليه، جاري تشغيل البوت...")
     else:
-        print("❌ خطأ: لم يتم العثور على التوكن في إعدادات البيئة (DISCORD_TOKEN)!")
+        print("❌ خطأ: لم يتم العثور على التوكن في إعدادات البيئة!")
+        return # يوقف التشغيل إذا لم يوجد توكن
+
+    bot.run(TOKEN) # هذا السطر يجب أن يكون في الخارج (مستوى الصفر)
