@@ -47,6 +47,23 @@ class Roleplay(commands.Cog):
     def save_rp(self):
         with open(self.RP_DB_FILE, "w", encoding="utf-8") as f:
             json.dump(self.rp_data, f, ensure_ascii=False, indent=4)
+@bot.command()
+async def help(ctx):
+    embed = discord.Embed(
+        title="🛡️ | مركز المساعدة - كوفا سيتي",
+        description="أهلاً بك يا مواطن، إليك قائمة الأوامر المتاحة لخدمتك في المدينة:",
+        color=discord.Color.gold() # لون ذهبي يعطي طابع الفخامة
+    )
+    
+    # إضافة الأقسام بتنسيق مرتب
+    embed.add_field(name="💼 | الأوامر العامة", value="`-id` لعرض بطاقتك الشخصية\n`-job` لمعرفة وظيفتك الحالية", inline=False)
+    embed.add_field(name="🚔 | أوامر الشرطة", value="`-arrest` للقبض على المطلوبين\n`-ticket` لتحرير مخالفة مرورية", inline=False)
+    embed.add_field(name="🏦 | أوامر البنك", value="`-balance` لمعرفة رصيدك\n`-transfer` لتحويل الأموال", inline=False)
+    
+    embed.set_footer(text="Cova City RP | نظام المدينة الرسمي")
+    embed.set_thumbnail(url=ctx.guild.icon.url) # يضع صورة السيرفر في الزاوية لإضافة هيبة
+    
+    await ctx.send(embed=embed)
 
     @commands.command(name="انشاء")
     async def create_char(self, ctx):
