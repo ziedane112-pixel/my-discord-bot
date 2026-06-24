@@ -47,7 +47,7 @@ class Roleplay(commands.Cog):
     def save_rp(self):
         with open(self.RP_DB_FILE, "w", encoding="utf-8") as f:
             json.dump(self.rp_data, f, ensure_ascii=False, indent=4)
-@bot.command()
+@bot.command("help")
 async def help(ctx):
     embed = discord.Embed(
         title="🛡️ | مركز المساعدة - كوفا سيتي",
