@@ -26,4 +26,4 @@ async def rotate_status():
 
 if __name__ == "__main__":
     bot.run(os.environ.get("DISCORD_TOKEN"))
-    
+
