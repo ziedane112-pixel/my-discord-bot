@@ -65,6 +65,31 @@ async def help(ctx):
     
     await ctx.send(embed=embed)
 
+@bot.command(name="انشاء_رتب")
+@commands.has_permissions(administrator=True)
+async def create_roles(ctx):
+    guild = ctx.guild
+    
+    # قائمة الرتب مع ألوانها الفخمة
+    roles_to_create = {
+        "👑 | Owner": discord.Color.gold(),
+        "💎 | Co-Owner": discord.Color.blue(),
+        "🛡️ | Admin": discord.Color.red(),
+        "👮 | Moderator": discord.Color.green()
+    }
+
+    await ctx.send("⚙️ | جاري تأسيس هيكلة السيرفر... يرجى الانتظار.")
+
+    for role_name, color in roles_to_create.items():
+        existing_role = discord.utils.get(guild.roles, name=role_name)
+        if not existing_role:
+            role = await guild.create_role(name=role_name, color=color, reason="تأسيس تلقائي لرتب السيرفر")
+            await ctx.send(f"✅ | تم إنشاء رتبة: **{role.name}**")
+        else:
+            await ctx.send(f"⚠️ | الرتبة **{role_name}** موجودة بالفعل.")
+
+    await ctx.send("🚀 | اكتملت عملية التأسيس بنجاح، السيرفر جاهز!")
+
     @commands.command(name="انشاء")
     async def create_char(self, ctx):
         """إنشاء شخصية RP جديدة"""
