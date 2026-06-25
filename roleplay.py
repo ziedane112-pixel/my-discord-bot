@@ -4,7 +4,6 @@ import random
 import discord
 from discord.ext import commands
 
-
 class Roleplay(commands.Cog):
 
     def __init__(self, bot):
@@ -28,7 +27,6 @@ class Roleplay(commands.Cog):
                     return data
             except json.JSONDecodeError:
                 pass
-                
         default_data = {
             "chars": {},
             "items": {},
@@ -44,53 +42,43 @@ class Roleplay(commands.Cog):
             json.dump(default_data, f, ensure_ascii=False, indent=4)
         return default_data
 
-    def save_rp(self):
-        with open(self.RP_DB_FILE, "w", encoding="utf-8") as f:
-            json.dump(self.rp_data, f, ensure_ascii=False, indent=4)
-@bot.command("help")
-async def help(ctx):
-    embed = discord.Embed(
-        title="🛡️ | مركز المساعدة - كوفا سيتي",
-        description="أهلاً بك يا مواطن، إليك قائمة الأوامر المتاحة لخدمتك في المدينة:",
-        color=discord.Color.gold() # لون ذهبي يعطي طابع الفخامة
-    )
-    
-    # إضافة الأقسام بتنسيق مرتب
-    embed.add_field(name="💼 | الأوامر العامة", value="`-id` لعرض بطاقتك الشخصية\n`-job` لمعرفة وظيفتك الحالية", inline=False)
-    embed.add_field(name="🚔 | أوامر الشرطة", value="`-arrest` للقبض على المطلوبين\n`-ticket` لتحرير مخالفة مرورية", inline=False)
-    embed.add_field(name="🏦 | أوامر البنك", value="`-balance` لمعرفة رصيدك\n`-transfer` لتحويل الأموال", inline=False)
-    
-    embed.set_footer(text="Cova City RP | نظام المدينة الرسمي")
-    embed.set_thumbnail(url=ctx.guild.icon.url) # يضع صورة السيرفر في الزاوية لإضافة هيبة
-    
-    await ctx.send(embed=embed)
+    @commands.command(name="help")
+    async def help(self, ctx):
+        embed = discord.Embed(
+            title="🛡️ | مركز المساعدة - كوفا سيتي",
+            description="أهلاً بك يا مواطن، إليك قائمة الأوامر المتاحة لخدمتك في المدينة:",
+            color=discord.Color.gold()
+        )
+        embed.add_field(name="💼 | الأوامر العامة", value="`-id` لعرض بطاقتك الشخصية\n`-job` لمعرفة وظيفتك الحالية", inline=False)
+        embed.add_field(name="🚔 | أوامر الشرطة", value="`-arrest` للقبض على المطلوبين\n`-ticket` لتحرير مخالفة مرورية", inline=False)
+        embed.add_field(name="🏦 | أوامر البنك", value="`-balance` لمعرفة رصيدك\n`-transfer` لتحويل الأموال", inline=False)
+        embed.set_footer(text="Cova City RP | نظام المدينة الرسمي")
+        embed.set_thumbnail(url=ctx.guild.icon.url)
+        await ctx.send(embed=embed)
 
-@bot.command(name="انشاء_رتب")
-@commands.has_permissions(administrator=True)
-async def create_roles(ctx):
-    guild = ctx.guild
-    
-    # قائمة الرتب مع ألوانها الفخمة
-    roles_to_create = {
-        "👑 | Owner": discord.Color.gold(),
-        "💎 | Co-Owner": discord.Color.blue(),
-        "🛡️ | Admin": discord.Color.red(),
-        "👮 | Moderator": discord.Color.green()
-    }
+    @commands.command(name="انشاء_رتب")
+    @commands.has_permissions(administrator=True)
+    async def create_roles(self, ctx):
+        guild = ctx.guild
+        roles_to_create = {
+            "👑 | Owner": discord.Color.gold(),
+            "💎 | Co-Owner": discord.Color.blue(),
+            "🛡️ | Admin": discord.Color.red(),
+            "👮 | Moderator": discord.Color.green()
+        }
+        await ctx.send("⚙️ | جاري تأسيس هيكلة السيرفر... يرجى الانتظار.")
+        for role_name, color in roles_to_create.items():
+            existing_role = discord.utils.get(guild.roles, name=role_name)
+            if not existing_role:
+                await guild.create_role(name=role_name, color=color, reason="تأسيس تلقائي لرتب السيرفر")
+                await ctx.send(f"✅ | تم إنشاء رتبة: **{role_name}**")
+            else:
+                await ctx.send(f"⚠️ | الرتبة **{role_name}** موجودة بالفعل.")
+        await ctx.send("🚀 | اكتملت عملية التأسيس بنجاح، السيرفر جاهز!")
 
-    await ctx.send("⚙️ | جاري تأسيس هيكلة السيرفر... يرجى الانتظار.")
-
-    for role_name, color in roles_to_create.items():
-        existing_role = discord.utils.get(guild.roles, name=role_name)
-        if not existing_role:
-            role = await guild.create_role(name=role_name, color=color, reason="تأسيس تلقائي لرتب السيرفر")
-            await ctx.send(f"✅ | تم إنشاء رتبة: **{role.name}**")
-        else:
-            await ctx.send(f"⚠️ | الرتبة **{role_name}** موجودة بالفعل.")
-
-    await ctx.send("🚀 | اكتملت عملية التأسيس بنجاح، السيرفر جاهز!")
-    async def setup(bot):
+async def setup(bot):
     await bot.add_cog(Roleplay(bot))
+
     
     @commands.command(name="انشاء")
     async def create_char(self, ctx):
