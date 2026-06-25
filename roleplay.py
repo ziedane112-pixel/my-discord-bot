@@ -89,7 +89,9 @@ async def create_roles(ctx):
             await ctx.send(f"⚠️ | الرتبة **{role_name}** موجودة بالفعل.")
 
     await ctx.send("🚀 | اكتملت عملية التأسيس بنجاح، السيرفر جاهز!")
-
+    async def setup(bot):
+    await bot.add_cog(Roleplay(bot))
+    
     @commands.command(name="انشاء")
     async def create_char(self, ctx):
         """إنشاء شخصية RP جديدة"""
